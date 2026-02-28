@@ -373,6 +373,43 @@
       "item": [
         {
           "name": "User Not Found",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "f0e6f21a-4ae5-45f7-8a43-20a24e3a27c3",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "2afdca67-8cc4-4fa7-b661-0976d1f30b7f",
+                "exec": [
+                  "pm.test(\"Status is 404\", () => {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "",
+                  "pm.test(\"Response time under 800ms\", () => {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(800);",
+                  "});",
+                  "",
+                  "pm.test(\"Response body is empty object\", () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.eql({});",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
           "id": "11c1a5ad-72e1-4330-9c21-527250a1dabd",
           "request": {
             "method": "GET",
@@ -393,10 +430,61 @@
         },
         {
           "name": "Login - Bad Credentials",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "9d9554be-3477-4bc9-a4e0-c52984d982a8",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "fb004c4f-d964-4479-9a3d-53c65080a22d",
+                "exec": [
+                  "pm.test(\"Status is 400\", () => {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test(\"Response time under 800ms\", () => {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(800);",
+                  "});",
+                  "",
+                  "pm.test(\"Error message is present\", () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('error');",
+                  "});",
+                  "",
+                  "pm.test(\"Error message says missing password\", () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.error).to.eql(\"Missing password\");",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
           "id": "07c5c337-ac1a-4d18-aca3-66977ab8f53c",
           "request": {
             "method": "POST",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"peter@klaven.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "{{baseUrl}}/api/login",
               "host": [
