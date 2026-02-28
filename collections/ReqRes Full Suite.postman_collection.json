@@ -228,19 +228,70 @@
         },
         {
           "name": "Update User",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "1cbd8b78-35c7-4231-b7a5-3c9220dc8f4e",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "beeeb5d3-2858-41ee-a4da-271a8db52bf9",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response time under 800ms\", () => {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(800);",
+                  "});",
+                  "",
+                  "pm.test(\"Job was updated\", () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.job).to.eql(\"zion resident\");",
+                  "});",
+                  "",
+                  "pm.test(\"Response has updatedAt timestamp\", () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('updatedAt');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
           "id": "9194b472-bfed-480f-b230-8751bfe114fc",
           "request": {
             "method": "PUT",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"morpheus\",\n    \"job\": \"zion resident\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "raw": "{{baseUrl}}/api/users/{{createdUserId}}",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
                 "users",
-                "{{userId}}"
+                "{{createdUserId}}"
               ]
             }
           },
