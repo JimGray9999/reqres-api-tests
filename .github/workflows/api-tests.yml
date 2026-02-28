@@ -1,0 +1,42 @@
+name: API Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Newman
+        run: npm install -g newman newman-reporter-htmlextra
+
+      - name: Run API tests
+        run: |
+          newman run collections/ReqRes\ Full\ Suite.postman_collection.json \
+            --iteration-data data/users.csv \
+            --env-var "baseUrl=https://reqres.in" \
+            --env-var "apiKey=${{ secrets.REQRES_API_KEY }}" \
+            --env-var "token=" \
+            --reporters cli,htmlextra \
+            --reporter-htmlextra-export reports/report.html \
+            --bail
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-report
+          path: reports/report.html
+          retention-days: 30
