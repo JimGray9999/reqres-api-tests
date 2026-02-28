@@ -2,8 +2,7 @@
   "info": {
     "_postman_id": "f3ef05ae-1c53-4eeb-b399-abccaae6dd56",
     "name": "ReqRes Full Suite",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "20873752"
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
@@ -11,6 +10,7 @@
       "item": [
         {
           "name": "Login",
+          "id": "b3cb41d0-ca85-4514-ab2b-f39e315d5145",
           "request": {
             "method": "POST",
             "header": [],
@@ -36,13 +36,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "c2c6ed2e-c491-42da-9333-f0c48cb5ac85"
     },
     {
       "name": "Users",
       "item": [
         {
           "name": "List Users",
+          "id": "ec0bed7a-29f6-408e-8d6e-46a2e325be0c",
           "request": {
             "method": "GET",
             "header": [
@@ -131,6 +133,7 @@
               }
             }
           ],
+          "id": "446b81e9-36cb-41a4-805a-7b1411f70e5f",
           "request": {
             "method": "GET",
             "header": [],
@@ -150,9 +153,66 @@
         },
         {
           "name": "Create User",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "cb57d3bb-df1d-4ade-94f7-bf30d929de32",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "799962b0-c9e7-4b1d-98e5-aaa4f7a0b443",
+                "exec": [
+                  "pm.test(\"Status is 201\", () => {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Response time under 800ms\", () => {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(800);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has id and createdAt\", () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('id');",
+                  "    pm.expect(json).to.have.property('createdAt');",
+                  "});",
+                  "",
+                  "pm.test(\"Name and job are correct\", () => {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json.name).to.eql(\"morpheus\");",
+                  "    pm.expect(json.job).to.eql(\"leader\");",
+                  "});",
+                  "",
+                  "// Save the id for Update and Delete to use",
+                  "pm.environment.set('createdUserId', pm.response.json().id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "4b4dbac0-cfb9-45be-8510-391679bc5d19",
           "request": {
             "method": "POST",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"morpheus\",\n    \"job\": \"leader\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
               "raw": "{{baseUrl}}/api/users",
               "host": [
@@ -168,6 +228,7 @@
         },
         {
           "name": "Update User",
+          "id": "9194b472-bfed-480f-b230-8751bfe114fc",
           "request": {
             "method": "PUT",
             "header": [],
@@ -187,6 +248,7 @@
         },
         {
           "name": "Delete User",
+          "id": "9e3833a8-9972-4426-9bbc-36be335e2494",
           "request": {
             "method": "DELETE",
             "header": [],
@@ -204,13 +266,15 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "30084d85-d35d-448a-ba5c-fcaf828bcfae"
     },
     {
       "name": "Edge Cases",
       "item": [
         {
           "name": "User Not Found",
+          "id": "11c1a5ad-72e1-4330-9c21-527250a1dabd",
           "request": {
             "method": "GET",
             "header": [],
@@ -230,6 +294,7 @@
         },
         {
           "name": "Login - Bad Credentials",
+          "id": "07c5c337-ac1a-4d18-aca3-66977ab8f53c",
           "request": {
             "method": "POST",
             "header": [],
@@ -246,7 +311,8 @@
           },
           "response": []
         }
-      ]
+      ],
+      "id": "b23a794f-b9e2-4085-a38e-fa5cc91d5def"
     }
   ],
   "auth": {
