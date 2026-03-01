@@ -29,6 +29,7 @@ jobs:
             --env-var "baseUrl=https://reqres.in" \
             --env-var "apiKey=${{ secrets.REQRES_API_KEY }}" \
             --env-var "token=" \
+            --delay-request 500 \
             --reporters cli,htmlextra \
             --reporter-htmlextra-export reports/report.html \
             --bail
